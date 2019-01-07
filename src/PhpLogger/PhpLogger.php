@@ -22,7 +22,7 @@ class PhpLogger implements LoggerInterface
     /** @var string  */
     private $sharedMemoryPathname = '/dev/shm/phplogger';
     /** @var string  */
-    private $url = 'http://web:80';
+    private $url = 'https://api.phplogger.com:80';
     /** @var string */
     private $token;
     /** @var string  */
