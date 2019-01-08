@@ -67,8 +67,9 @@ class PhpLogger implements LoggerInterface
 	    return $this->id;
     }
 
-	/**
+    /**
      * Send buffer on destruction of the object
+     * @throws \Throwable
      */
     public function __destruct()
     {
