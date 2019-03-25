@@ -26,7 +26,7 @@ You need to create PHP Logger object
 include __DIR__ . '/vendor/autoload.php';
 # create logger object
 $token = 'd173f174f8aa6793ab8f8b6c9286ec9834a33ee6';
-$logger = new \PhpLogger\PhpLogger($token);
+$logger = new \PhpLogger\Logger($token);
 ```
 
 NOTE: token can be acquired at the PHP Logger <a href="https://phplogger/profile">profile page</a>.
