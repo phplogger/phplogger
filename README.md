@@ -63,6 +63,14 @@ If the data transfer fails, the logs are completely discarded.
 There are additional mechanisms that prevent logs from being send to a faulty server, which protects the application
 from performance degradation. 
 
+## Fallback mechanism
+
+Whenever the library is unable to reach the server in a reasonable amount of time, the fallback mechanism are initiated 
+with the purpose of preventing application overall performance degradation. The library first checks if shared memory 
+directory (/dev/shm) is available, in case it's not - the fallback to temporary directory happens. The shared file system 
+space is used to record last error and prevent the library of spamming the non-responding server. Basically it takes a 
+1 minute timeout and then tries to send logs again. 
+
 ## Support
 
 In case of ANY issues with the library please create an Issue on GitHub 
