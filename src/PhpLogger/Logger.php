@@ -20,7 +20,9 @@ class Logger implements LoggerInterface
     /** @var string */
     private $version = '1.1';
     /** @var string  */
-    private $sharedMemoryPathname = '/dev/shm/phplogger';
+    private $sharedFileSystemSpace;
+    /** @var string  */
+    private $lastFailureFileName = 'phplogger-last-failure';
     /** @var string  */
     private $url = 'https://api.phplogger.com';
     /** @var string */
@@ -52,9 +54,7 @@ class Logger implements LoggerInterface
         $this->id = $this->generateId();
         $this->bufferStream = fopen('php://temp', 'r+'); // up to 2mb in memory
         $this->buffer = new Stream($this->bufferStream);
-        if ($this->sharedMemoryInitialize() === false) {
-            throw new \RuntimeException('Shared memory not available at /dev/shm');
-        }
+        $this->sharedFileSystemSpace = $this->findOptimalSharedFileSystem();
     }
 
     /**
@@ -161,14 +161,25 @@ class Logger implements LoggerInterface
     }
 
     /**
-     * @return bool
+     * @return string
      */
-    private function sharedMemoryInitialize()
+    private function findOptimalSharedFileSystem()
     {
-        if (is_dir($this->sharedMemoryPathname) === false) {
-            return mkdir($this->sharedMemoryPathname);
+        $sharedMemory = '/dev/shm';
+        if (is_dir($sharedMemory) === true && is_writable($sharedMemory) === true) {
+            return $sharedMemory;
         }
-        return true;
+        $sharedTemporarySpace = sys_get_temp_dir();
+        if (is_dir($sharedTemporarySpace) === true && is_writable($sharedTemporarySpace) === true) {
+            return $sharedTemporarySpace;
+        }
+        throw new \RuntimeException(
+            sprintf(
+                'Could not find shared file system path. Both %s and %s are not available. Please make one of the directories available.',
+                $sharedMemory,
+                $sharedTemporarySpace
+            )
+        );
     }
 
     /**
@@ -176,7 +187,7 @@ class Logger implements LoggerInterface
      */
     private function sharedMemoryReadLastFailure()
     {
-        $path = $this->sharedMemoryPathname . '/last-failure';
+        $path = $this->sharedFileSystemSpace . '/' . $this->lastFailureFileName;
         if (is_file($path) === false) {
             return null;
         }
@@ -189,7 +200,7 @@ class Logger implements LoggerInterface
      */
     private function sharedMemorySaveLastFailure()
     {
-        $path = $this->sharedMemoryPathname . '/last-failure';
+        $path = $this->sharedFileSystemSpace . '/' . $this->lastFailureFileName;
         return file_put_contents($path, time()) === false ? false : true;
     }
 
