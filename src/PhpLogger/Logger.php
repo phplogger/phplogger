@@ -18,7 +18,7 @@ class Logger implements LoggerInterface
     /** @var int  */
     private static $sequence = 0;
     /** @var string */
-    private $version = '1.1';
+    private $version = '1.2';
     /** @var string  */
     private $sharedFileSystemSpace;
     /** @var string  */
