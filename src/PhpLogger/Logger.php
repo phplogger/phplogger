@@ -42,7 +42,7 @@ class Logger implements LoggerInterface
      * PhpLogger constructor.
      * @param string $token
      */
-    public function __construct(string $token)
+    public function __construct($token)
     {
         $this->client = new Client(
             [
@@ -105,18 +105,18 @@ class Logger implements LoggerInterface
             'X-PHP-LOGGER-TOKEN' => $this->token,
             'X-PHP-LOGGER-ID' => $this->id,
             'X-PHP-LOGGER-HOSTNAME' => gethostname(),
-            'X-PHP-LOGGER-FILENAME' => $_SERVER["SCRIPT_FILENAME"] ?? '',
-            'X-PHP-LOGGER-URI' => $_SERVER["REQUEST_URI"] ?? '',
-            'X-PHP-LOGGER-START' => $_SERVER["REQUEST_TIME"] ?? '',
+            'X-PHP-LOGGER-FILENAME' => array_key_exists("SCRIPT_FILENAME", $_SERVER) ? $_SERVER["SCRIPT_FILENAME"] : '',
+            'X-PHP-LOGGER-URI' => array_key_exists("REQUEST_URI", $_SERVER) ? $_SERVER["REQUEST_URI"] : '',
+            'X-PHP-LOGGER-START' => array_key_exists("REQUEST_TIME", $_SERVER) ? $_SERVER["REQUEST_TIME"] : '',
             'X-PHP-LOGGER-SAPI' => php_sapi_name(),
-            'X-PHP-LOGGER-HOST' => $_SERVER['HTTP_HOST'] ?? '',
+            'X-PHP-LOGGER-HOST' => array_key_exists('HTTP_HOST', $_SERVER) ? $_SERVER['HTTP_HOST'] : '',
         ];
     }
 
     /**
      * @param string $body
      */
-    private function bufferStore(string $body)
+    private function bufferStore($body)
     {
         $this->buffer->write($body . "\n");
     }
