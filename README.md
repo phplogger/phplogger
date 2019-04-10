@@ -4,6 +4,9 @@ Our approach is centered around the idea that application logs should be easy to
 access and use in order to provide quality software. We encourage you to log everything your 
 application does and we provide the tools for that.
 
+[![CircleCI](https://circleci.com/gh/phplogger/phplogger.svg?style=shield)](https://circleci.com/gh/phplogger/phplogger)
+[![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
+
 ## Installation
 
 You need an account first, which can be created at <a href="https://phplogger.com">phplogger.com</a>.
