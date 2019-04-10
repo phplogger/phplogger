@@ -1,0 +1,7 @@
+version: '3'
+services:
+  php_basic:
+    build:
+      context: ./docker
+    volumes:
+      - ./:/var/www/html
