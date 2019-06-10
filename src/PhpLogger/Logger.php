@@ -37,6 +37,10 @@ class Logger implements LoggerInterface
     private $buffer;
     /** @var int  */
     private $bufferThreshold = 4194304; // bytes (4mb) 1048576 * 4
+    /** @var bool  */
+    private $wasOpened = false;
+    /** @var bool  */
+    private $wasClosed = false;
 
     /**
      * PhpLogger constructor.
@@ -51,10 +55,65 @@ class Logger implements LoggerInterface
             ]
         );
         $this->token = $token;
+        $this->sharedFileSystemSpace = $this->findOptimalSharedFileSystem();
+    }
+
+    /**
+     * Opens the buffer and logging capabilities
+     * If it was not yet opened
+     */
+    private function openIfNot()
+    {
+        if ($this->wasClosed === true) {
+            throw new \RuntimeException(
+                'Cannot open buffer for PhpLogger. The buffer has been closed and send off to the server already.'
+            );
+        }
+
+        if ($this->wasOpened === true) {
+            return;
+        }
+
+        $this->open();
+        $this->wasOpened = true;
+    }
+
+    /**
+     * Opens the buffer and logging capabilities
+     */
+    private function open()
+    {
         $this->id = $this->generateId();
         $this->bufferStream = fopen('php://temp', 'r+'); // up to 2mb in memory
         $this->buffer = new Stream($this->bufferStream);
-        $this->sharedFileSystemSpace = $this->findOptimalSharedFileSystem();
+        register_shutdown_function([$this, 'closeIfNot']);
+    }
+
+    /**
+     * Sends off all the logs that are in the buffer
+     * And releases the buffer
+     * NOTE: After calling this method the logger object is not able to send logs anymore
+     * @throws \Throwable
+     */
+    public function closeIfNot()
+    {
+        if ($this->wasClosed === true || $this->wasOpened === false) {
+            return;
+        }
+        $this->close();
+        $this->wasClosed = true;
+    }
+
+    /**
+     * Ends the logging and discards the buffer
+     * @throws \Throwable
+     */
+    private function close()
+    {
+        if ($this->buffer->tell() > 0) {
+            $this->bufferSend();
+        }
+        unset($this->buffer);
     }
 
     /**
@@ -65,17 +124,6 @@ class Logger implements LoggerInterface
     public function __toString()
     {
         return $this->id;
-    }
-
-    /**
-     * Send buffer on destruction of the object
-     * @throws \Throwable
-     */
-    public function __destruct()
-    {
-        if ($this->buffer->tell() > 0) {
-            $this->bufferSend();
-        }
     }
 
     /**
@@ -216,6 +264,8 @@ class Logger implements LoggerInterface
      */
     public function log($level, $message, array $context = array())
     {
+        $this->openIfNot();
+
         $body = json_encode(
             [
                 'severity' => (string) $level,
