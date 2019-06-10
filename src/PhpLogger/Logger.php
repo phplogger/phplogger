@@ -55,6 +55,7 @@ class Logger implements LoggerInterface
             ]
         );
         $this->token = $token;
+        $this->id = $this->generateId();
         $this->sharedFileSystemSpace = $this->findOptimalSharedFileSystem();
     }
 
@@ -83,7 +84,6 @@ class Logger implements LoggerInterface
      */
     private function open()
     {
-        $this->id = $this->generateId();
         $this->bufferStream = fopen('php://temp', 'r+'); // up to 2mb in memory
         $this->buffer = new Stream($this->bufferStream);
         register_shutdown_function([$this, 'closeIfNot']);
