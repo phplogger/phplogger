@@ -24,6 +24,7 @@ class ErrorHandler
         return function(int $errno, string $errstr, string $errfile, int $errline) use ($logger) {
             $message = 'In ' . $errfile . ' line ' . $errline . ':';
             $message .= "\r\n";
+            $message .= "\r\n";
             $message = '[' . $errno . ']';
             $message .= "\r\n";
             $message .= $errstr;
@@ -41,7 +42,7 @@ class ErrorHandler
 
     private static function registerExceptionHandler(Logger $logger)
     {
-        set_error_handler(
+        set_exception_handler(
             self::createExceptionHandlerCallback($logger)
         );
     }
@@ -51,9 +52,11 @@ class ErrorHandler
         return function(\Throwable $exception) use ($logger) {
             $message = 'In ' . $exception->getFile() . ' line ' . $exception->getLine() . ':';
             $message .= "\r\n";
-            $message = '[' . get_class($exception) . ']';
+            $message .= "\r\n";
+            $message .= '[' . get_class($exception) . ']';
             $message .= "\r\n";
             $message .= $exception->getMessage();
+            $message .= "\r\n";
             $message .= "\r\n";
             $message .= 'Exception trace:';
             $message .= "\r\n";
