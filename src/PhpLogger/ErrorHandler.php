@@ -22,7 +22,9 @@ class ErrorHandler
     private static function createErrorHandlerCallback(Logger $logger)
     {
         return function(int $errno, string $errstr, string $errfile, int $errline) use ($logger) {
-            $message = 'Encountered Error with number ' . $errno;
+            $message = 'In ' . $errfile . ' line ' . $errline . ':';
+            $message .= "\r\n";
+            $message = '[' . $errno . ']';
             $message .= "\r\n";
             $message .= $errstr;
             $logger->error(
@@ -47,11 +49,14 @@ class ErrorHandler
     private static function createExceptionHandlerCallback(Logger $logger)
     {
         return function(\Throwable $exception) use ($logger) {
-            $message = 'Encountered Exception of class ' . get_class($exception);
+            $message = 'In ' . $exception->getFile() . ' line ' . $exception->getLine() . ':';
+            $message .= "\r\n";
+            $message = '[' . get_class($exception) . ']';
             $message .= "\r\n";
             $message .= $exception->getMessage();
             $message .= "\r\n";
-            $message .= 'Trace route';
+            $message .= 'Exception trace:';
+            $message .= "\r\n";
             $message .= $exception->getTraceAsString();
             $logger->error(
                 $message,
@@ -75,7 +80,6 @@ class ErrorHandler
                     )
                 ]
             );
-        }
+        };
     }
-
 }
