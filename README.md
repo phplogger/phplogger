@@ -1,4 +1,4 @@
-# PHP Logger
+# Phplogger
 PhpLogger is a logging system, designed to have be easy to install as use. 
 Our approach is centered around the idea that application logs should be easy to acquire, 
 access and use in order to provide quality software. We encourage you to log everything your 
