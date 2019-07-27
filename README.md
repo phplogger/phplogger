@@ -1,8 +1,5 @@
 # Phplogger
-PhpLogger is a logging system, designed to have be easy to install as use. 
-Our approach is centered around the idea that application logs should be easy to acquire, 
-access and use in order to provide quality software. We encourage you to log everything your 
-application does and we provide the tools for that.
+PhpLogger - logging system, which is designed to get insights from your application data. It includes logs collection, process tracking and pivot table event exploration. We encourage you to log everything your application does and we provide the tools for that.
 
 [![CircleCI](https://circleci.com/gh/phplogger/phplogger.svg?style=shield)](https://circleci.com/gh/phplogger/phplogger)
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
@@ -21,8 +18,7 @@ composer require phplogger/phplogger
 
 PHP Logger client supports PHP <a href="https://www.php-fig.org/psr/psr-3/#3-psrlogloggerinterface">PSR-3 standard</a>.
 
-### Creating logger object
-
+## Initialize $logger
 You need to create PHP Logger object
 ```php
 # add autoloader
@@ -32,11 +28,11 @@ $token = 'd173f174f8aa6793ab8f8b6c9286ec9834a33ee6';
 $logger = new \PhpLogger\Logger($token);
 ```
 
-NOTE: token can be acquired at the PHP Logger <a href="https://phplogger/profile">profile page</a>.
+NOTE: token can be acquired at the PHP Logger <a href="https://app.phplogger.com/profile/product-setup">first setup</a> tutorial.
 
-### Writing logs
+### Write logs
 
-After you created the object writing logs is pretty simple.
+Call methods with appropriate severity. All of the severity methods support $message and $context arguments.
 
 ```php
 # write log messages
@@ -50,7 +46,7 @@ $logger->info('this is an info message line');
 $logger->debug('this is a debug message line');
 ```
 
-Also you can add context array to the messages, which will be passed to the server as well
+Pass context array to the methods, which will be passed to the server as well
 ```php
 # define context to pass along with the message
 $context = ['time' => microtime(true)];
@@ -58,22 +54,29 @@ $context = ['time' => microtime(true)];
 $logger->warning('this is a warning message', $context);
 ```
 
-## Delivery mechanisms
+### Catch errors
+
+Phplogger has an error handler class which allows to register $logger object to catch and log errors.
+This will catch both PHP Errors and Unhandled Exceptions.
+```php
+# register $logger for error collection
+\PhpLogger\ErrorHandler::register($logger);
+```
+NOTE: It's recomender to register only one $logger object for error collection
+
+## Integrations
+
+Phplogger supports integration with multiple frameworks and logging approaches. For more information see the 
+<a href="https://phplogger.com/learn">learning page</a>.
+
+## Logs Delivery
 
 Each PHP Logger object contains a buffer which collects all of the logs into memory.
 When the buffer size is exceeded or the PHP script execution ends, the data gets transferred to the server.
 If the data transfer fails, the logs are completely discarded. 
 There are additional mechanisms that prevent logs from being send to a faulty server, which protects the application
 from performance degradation. 
-
-## Fallback mechanism
-
-Whenever the library is unable to reach the server in a reasonable amount of time, the fallback mechanism are initiated 
-with the purpose of preventing application overall performance degradation. The library first checks if shared memory 
-directory (/dev/shm) is available, in case it's not - the fallback to temporary directory happens. The shared file system 
-space is used to record last error and prevent the library of spamming the non-responding server. Basically it takes a 
-1 minute timeout and then tries to send logs again. 
-
+ 
 ## Support
 
 In case of ANY issues with the library please create an Issue on GitHub 
