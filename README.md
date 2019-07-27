@@ -30,7 +30,7 @@ $logger = new \PhpLogger\Logger($token);
 
 NOTE: token can be acquired at the PHP Logger <a href="https://app.phplogger.com/profile/product-setup">first setup</a> tutorial.
 
-### Write logs
+## Write logs
 
 Call methods with appropriate severity. All of the severity methods support $message and $context arguments.
 
@@ -54,7 +54,7 @@ $context = ['time' => microtime(true)];
 $logger->warning('this is a warning message', $context);
 ```
 
-### Catch errors
+## Catch errors
 
 Phplogger has an error handler class which allows to register $logger object to catch and log errors.
 This will catch both PHP Errors and Unhandled Exceptions.
