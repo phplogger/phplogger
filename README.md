@@ -14,10 +14,6 @@ The basic installation requires <a href="https://getcomposer.org/download/">comp
 composer require phplogger/phplogger
 ```
 
-## Usage
-
-PHP Logger client supports PHP <a href="https://www.php-fig.org/psr/psr-3/#3-psrlogloggerinterface">PSR-3 standard</a>.
-
 ## Initialize $logger
 You need to create PHP Logger object
 ```php
@@ -27,10 +23,12 @@ include __DIR__ . '/vendor/autoload.php';
 $token = 'd173f174f8aa6793ab8f8b6c9286ec9834a33ee6';
 $logger = new \PhpLogger\Logger($token);
 ```
+Phplogger client supports <a href="https://www.php-fig.org/psr/psr-3/#3-psrlogloggerinterface">PSR-3 standard</a>.
 
 NOTE: token can be acquired at the PHP Logger <a href="https://app.phplogger.com/profile/product-setup">first setup</a> tutorial.
 
-## Write logs
+## Collect logs
+
 
 Call methods with appropriate severity. All of the severity methods support $message and $context arguments.
 
