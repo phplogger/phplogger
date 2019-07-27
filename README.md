@@ -69,10 +69,10 @@ Phplogger supports integration with multiple frameworks and logging approaches. 
 
 ## Logs Delivery
 
-Each PHP Logger object contains a buffer which collects all of the logs into memory.
+Each $logger object contains a buffer which collects all of the logs into memory.
 When the buffer size is exceeded or the PHP script execution ends, the data gets transferred to the server.
-If the data transfer fails, the logs are completely discarded. 
-There are additional mechanisms that prevent logs from being send to a faulty server, which protects the application
+In case the data transfer fails - the buffer is discarded. 
+There are additional mechanisms that prevent logs from being send to a faulty server. They protect the PHP application
 from performance degradation. 
  
 ## Support
