@@ -28,6 +28,6 @@ class Loggable
      */
     public function toArray(): array
     {
-        $this->context;
+        return $this->context;
     }
 }
