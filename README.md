@@ -1,5 +1,5 @@
 # Phplogger
-PhpLogger - logging system, which is designed to get insights from your application data. It includes logs collection, process tracking and pivot table event exploration. We encourage you to log everything your application does and we provide the tools for that.
+PhpLogger - logging system, which is designed to help you get insights from your application data. It includes logs collection, process tracking and pivot table event exploration. We encourage you to log everything your application does and we provide the tools for that.
 
 [![CircleCI](https://circleci.com/gh/phplogger/phplogger.svg?style=shield)](https://circleci.com/gh/phplogger/phplogger)
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
