@@ -62,6 +62,15 @@ This will catch both PHP Errors and Unhandled Exceptions.
 ```
 NOTE: It's recomender to register only one $logger object for error collection
 
+## Format exceptions and errors
+
+Phplogger has special formatter available for PHP Error & Exception handling. 
+The format class creates a special loggable object, which you can use for custom error processing.
+```php
+$loggable = \PhpLogger\Format\Format::createFromException($exception);
+$logger->critical($loggable->toString(), $loggable->toArray());
+```
+
 ## Integrations
 
 Phplogger supports integration with multiple frameworks and logging approaches. For more information see the 
