@@ -29,10 +29,18 @@ class Format
                     return [
                         'file' => $traceRecord['file'],
                         'line' => $traceRecord['line'],
-                        'function' => $traceRecord['function'],
-                        'class' => $traceRecord['class'],
-                        'type' => $traceRecord['type'],
-                        'args_count' => count($traceRecord['args']),
+                        'function' => array_key_exists('function', $traceRecord)
+                            ? $traceRecord['function']
+                            : null,
+                        'class' => array_key_exists('class', $traceRecord)
+                            ? $traceRecord['class']
+                            : null,
+                        'type' => array_key_exists('type', $traceRecord)
+                            ? $traceRecord['type']
+                            : null,
+                        'args_count' => array_key_exists('args', $traceRecord)
+                            ? count($traceRecord['args'])
+                            : 0,
                     ];
                 },
                 $exception->getTrace()
