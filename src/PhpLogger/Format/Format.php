@@ -27,8 +27,12 @@ class Format
             'trace' => array_map(
                 function(array $traceRecord) {
                     return [
-                        'file' => $traceRecord['file'],
-                        'line' => $traceRecord['line'],
+                        'file' => array_key_exists('file', $traceRecord)
+                            ? $traceRecord['file']
+                            : null,
+                        'line' => array_key_exists('line', $traceRecord)
+                            ? $traceRecord['line']
+                            : null,
                         'function' => array_key_exists('function', $traceRecord)
                             ? $traceRecord['function']
                             : null,
